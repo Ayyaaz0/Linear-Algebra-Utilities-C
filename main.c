@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
-
 #include "input.h"
 #include "linalg.h"
 #include "stats.h"
 
-//function prototypes
 static void main_menu(void);
 
 int main(void) {
@@ -15,7 +13,7 @@ int main(void) {
 
 static void main_menu(void) {
   bool running = true;
-  
+
   while (running) {
     printf("\n==== Numerical Toolkit ====\n ");
     printf("1. Linear Algebera Tool\n ");
@@ -23,8 +21,7 @@ static void main_menu(void) {
     printf("0. Exit\n");
     printf("===========================\n ");
 
-    int selection = 0;
-    scanf("%d", &selection);
+    int selection = get_int("Select an option: ");
 
     switch (selection) {
         case 1:
