@@ -15,17 +15,17 @@ static void main_menu(void) {
   bool running = true;
 
   while (running) {
-    printf("\n==== Numerical Toolkit ====\n ");
-    printf("1. Linear Algebera Tool\n ");
-    printf("2. Statistics Tool\n ");
+    printf("\n==== Numerical Toolkit ====\n");
+    printf("1. Linear Algebera Tool\n");
+    printf("2. Statistics Tool\n");
     printf("0. Exit\n");
-    printf("===========================\n ");
+    printf("===========================\n");
 
     int selection = get_int("Select an option: ");
 
     switch (selection) {
         case 1:
-            printf("Sub menu for linear algrea placeholder\n");
+            linalg_menu();
             break;
         case 2:
             printf("Sub menu for statistics placeholder\n");
