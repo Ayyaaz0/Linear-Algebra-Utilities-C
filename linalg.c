@@ -35,20 +35,33 @@ void linalg_menu(void) {
 }
 
 static void add_matrices_menu(void) {
+    int count = get_int_in_range("How many matrices do you want to add? (2-10)", 2, 10);
     int rows = get_int_in_range("Rows (1-10): ", 1, MAX);
     int cols = get_int_in_range("Cols (1-10): ", 1, MAX);
 
-    double A[MAX][MAX], B[MAX][MAX], RESULT[MAX][MAX];
+    double S[MAX][MAX]; //sum matrix
+    double M[MAX][MAX]; //temp matrix to read into
     
-    printf("Enter matrix A:\n");
-    input_matrix(A, rows, cols);
-    printf("Enter matrix B:\n");
-    input_matrix(B, rows, cols);
+    // Set the sum matrix to all zeroes
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            S[i][j] = 0.0;
+        }
+    }
+    // Read matrices and accumlate
+    for (int k = 1; k <= count; k++) {
+        printf("\n===== MATRX %d =====\n", k);
+        input_matrix(M, rows, cols);
 
-    add_matrices(A, B, RESULT, rows, cols);
-    
-    printf("Result (A + B):\n");
-    print_matrix(RESULT, rows, cols);  
+        // S = S + M
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                S[i][j] += M[i][j];
+            }
+        }
+    }
+    printf("\nResult of adding %d matrices:\n", count);
+    print_matrix(S, rows, cols);
 }
 
 //--- Helper Functions ----
