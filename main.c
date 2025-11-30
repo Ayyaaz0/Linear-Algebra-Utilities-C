@@ -11,6 +11,7 @@ int main(void) {
     while (running) {
         printf("\n===== Linear Algebra Calculator =====\n");
         printf("1. Add n matrices\n");
+        printf("2. Subtract N matrices\n");
         printf("0. Exit\n");
         printf("=====================================\n");
 
@@ -19,6 +20,9 @@ int main(void) {
         switch (selection) {
             case 1:
                 linalg_add_n();
+                break;
+            case 2:
+                linalg_sub_n();
                 break;
             case 0:
                 printf("EXIT\n");

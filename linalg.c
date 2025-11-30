@@ -6,7 +6,7 @@ static void input_matrix(Matrix *m);
 static void print_matrix(const Matrix *m);
 
 void linalg_add_n(void) {
-    int count = get_int_in_range("How many matrices do you want to add? (2-10)", 2, 10);
+    int count = get_int_in_range("How many matrices do you want to add? (2-10) ", 2, 10);
     
     Matrix sum, M;
     sum.rows = get_int_in_range("Rows (1-10):  ", 1, MAX);
@@ -18,21 +18,55 @@ void linalg_add_n(void) {
             sum.data[i][j] = 0.0;
         }
     }
-    // Read matrices and accumlate
+    // Read matrices and accumulate
     for (int k = 1; k <= count; k++) {
-        printf("\n===== MATRX %d =====\n", k);
+        if (k == 1) {
+            printf("\n===== MATRIX %d (starting matrix) =====\n", k);
+        } else {
+            printf("\n===== MATRIX %d (added to sum) =====\n", k);
+        }
+
         M.rows = sum.rows;
         M.cols = sum.cols;
         input_matrix(&M);
 
-        // S = S + M
+        // sum = sum + M
         for (int i = 0; i < sum.rows; i++) {
             for (int j = 0; j < sum.cols; j++) {
                 sum.data[i][j] += M.data[i][j];
             }
         }
     }
-    printf("\nResult of adding %d matrices:\n", count);
+    printf("\nFinal Result (sum of %d matrices)\n", count);
+    print_matrix(&sum);
+}
+
+void linalg_sub_n(void) {
+    int count = get_int_in_range("How many matrices do you want to subtract? (2-10) ", 2, 10);
+
+    Matrix sum, M;
+    sum.rows = get_int_in_range("Rows (1-10):  ", 1, MAX);
+    sum.cols = get_int_in_range("Cols (1-10):  ", 1, MAX);
+
+    // Read the first matrix into sum 
+    printf("\n===== MATRIX 1 (starting matrix) =====\n");
+    input_matrix(&sum);
+
+    // Subtract the remaining matrices from sum
+    for (int k = 2; k <= count; k++) {
+        printf("\n===== MATRIX %d (to subtract) =====\n", k);
+        M.rows = sum.rows;
+        M.cols = sum.cols;
+        input_matrix(&M);
+
+        // sum = sum - M
+        for (int i = 0; i < sum.rows; i++) {
+            for (int j = 0; j < sum.cols; j++) {
+                sum.data[i][j] -= M.data[i][j];
+            }
+        }
+    }
+    printf("\nFinal result (M1 minus the other %d matrices):\n", count - 1);
     print_matrix(&sum);
 }
 
