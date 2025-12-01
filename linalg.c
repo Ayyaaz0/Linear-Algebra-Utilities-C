@@ -67,28 +67,37 @@ void linalg_sub_n(void) {
   print_matrix(&sum);
 }
 
-void linalg_multiply(void) {
-    Matrix A, B, Result;
+void linalg_multiply_n(void) {
+  int count =
+      get_int_in_range("How many matrices to multiply? (2-10): ", 2, 10);
 
-    A.rows = get_int_in_range("Rows of A (1-10); ", 1, MAX);
-    A.cols = get_int_in_range("Cols of A (1-10): ", 1, MAX);
-    B.rows = get_int_in_range("Rows of B (1-10): ", 1, MAX);
-    B.cols = get_int_in_range("Cols of B (1-10): ", 1, MAX);
+  Matrix result;
+  Matrix current;
+  Matrix temp;
 
-    if (A.cols != B.rows) {
-        printf("Cannot multiply: cols(A) must equal rows(B).\n");
-        return;
+  printf("\n===== MATRIX 1 (starting matrix) =====\n");
+  result.rows = get_int_in_range("Rows (1-10): ", 1, MAX);
+  result.cols = get_int_in_range("Cols (1-10): ", 1, MAX);
+  input_matrix(&result);
+
+  for (int k = 2; k <= count; k++) {
+    printf("\n===== Matrx %d ====== \n", k);
+    current.rows = get_int_in_range("Rows (1-10): ", 1, MAX);
+    current.cols = get_int_in_range("Cols (1-10): ", 1, MAX);
+    input_matrix(&current);
+
+    // check matrices dimensions to be compatible with each other.
+    if (result.cols != current.rows) {
+      printf("Cannot multiply at step %d as current result is %d%d, "
+             "next matrix is %d%d. (Columns of results must equal rows of next).\n",
+             k, result.rows, result.cols, current.rows, current.cols);
+      return;
     }
-
-    printf("\n===== MATRIX (A) =====\n");
-    input_matrix(&A);
-    printf("\n===== MATRIX (B) =====\n");
-    input_matrix(&B);
-
-    multiply_matrices(&A, &B, &Result);
-
-    printf("\nResult (A * B):\n");
-    print_matrix(&Result);
+    multiply_matrices(&result, &current, &temp); // temp = result * current
+    result = temp; // copy the temp matrices back into result.
+  }
+  printf("\nResults of multiplying %d matrices: \n", count);
+  print_matrix(&result);
 }
 
 //--------------------- Helper Functions -----------------------//

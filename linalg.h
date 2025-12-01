@@ -14,6 +14,6 @@ typedef struct {
 // Public functions called from main.c:
 void linalg_add_n(void);
 void linalg_sub_n(void);
-void linalg_multiply(void);
+void linalg_multiply_n(void);
 
 #endif
