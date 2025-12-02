@@ -103,8 +103,11 @@ void linalg_transpose(void) {
     printf("\nTranpose a Matrix:\n");
     read_matrix_with_dims(&input, "Enter matrix to transpose:");
 
-    transpose_matrix(&input, &output);
+    printf("\nOriginal Matrix (%d x %d):\n", input.rows, input.cols);
+    print_matrix(&input);
     
+    transpose_matrix(&input, &output);
+
     printf("\nTransposed Matrix (%d x %d):\n", output.rows, output.cols);
     print_matrix(&output);
 }
