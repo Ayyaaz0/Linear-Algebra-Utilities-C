@@ -10,6 +10,7 @@
 #include "input.h"
 
 static void read_line(char *buffer, int size);
+static char *skip_leading_spaces(char *p);
 
 int get_int(const char *prompt) {
     char buffer[128];
@@ -19,10 +20,7 @@ int get_int(const char *prompt) {
         read_line(buffer, sizeof(buffer));
 
         // Skip leading whitespace
-        char *p = buffer;
-        while (isspace((unsigned char)*p)) {
-            p++;
-        }
+        char *p = skip_leading_spaces(buffer);
 
         // Check for empty input?
         if (*p == '\0') {
@@ -61,19 +59,6 @@ int get_int(const char *prompt) {
     }
 }
 
-
-int get_int_in_range(const char *prompt, int min , int max) {
-    int value;
-    while(true){
-        value = get_int(prompt);
-        if (value < min || value > max){
-            printf("Value must be between %d and %d.\n", min, max);
-        } else {
-            return value;
-        }
-    }
-}
-
 double get_double(const char *prompt) {
     char buffer[128];
 
@@ -82,10 +67,7 @@ double get_double(const char *prompt) {
         read_line(buffer, sizeof(buffer));
 
         // Skip leading whitespace
-        char *p = buffer;
-        while (isspace((unsigned char)*p)) {
-            p++;
-        }
+        char *p = skip_leading_spaces(buffer);
 
         // Check for empty input
         if (*p == '\0') {
@@ -121,7 +103,7 @@ double get_double(const char *prompt) {
             continue;
         }
 
-        // Check for matrice entrices
+        // Check for matrice entries
         if (value < MATRIX_MIN_VALUE || value > MATRIX_MAX_VALUE) {
             printf("Please enter a value between %.2f and %.2f.\n",
                    MATRIX_MIN_VALUE, MATRIX_MAX_VALUE);
@@ -132,6 +114,17 @@ double get_double(const char *prompt) {
     }
 }
 
+int get_int_in_range(const char *prompt, int min , int max) {
+    int value;
+    while(true){
+        value = get_int(prompt);
+        if (value < min || value > max){
+            printf("Value must be between %d and %d.\n", min, max);
+        } else {
+            return value;
+        }
+    }
+}
 
 //------------ Helper functions -----------------
 
@@ -142,3 +135,12 @@ static void read_line(char *buffer, int size) {
     }
     buffer[strcspn(buffer, "\n")] = '\0'; // remove newline character
 }
+
+// Skip leading whitespace and return pointer to first non-space char
+static char *skip_leading_spaces(char *p) {
+    while (isspace((unsigned char)*p)) {
+        p++;
+    }
+    return p;
+}
+
