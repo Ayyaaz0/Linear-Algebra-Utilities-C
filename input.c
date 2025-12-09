@@ -8,6 +8,7 @@
 #include <limits.h>
 
 #include "input.h"
+#include "cancel.h"
 
 static void read_line(char *buffer, int size);
 static char *skip_leading_spaces(char *p);
@@ -21,6 +22,12 @@ int get_int(const char *prompt) {
 
         // Skip leading whitespace
         char *p = skip_leading_spaces(buffer);
+
+        // Check for cancel
+        if ((p[0] == 'c' || p[0] == 'C') && p[1] == '\0') {
+            printf("Cancelling current operation.\n");
+            trigger_cancel();
+        }
 
         // Check for empty input?
         if (*p == '\0') {
@@ -68,6 +75,12 @@ double get_double(const char *prompt) {
 
         // Skip leading whitespace
         char *p = skip_leading_spaces(buffer);
+
+        // Check for cancel
+        if ((p[0] == 'c' || p[0] == 'C') && p[1] == '\0') {
+            printf("Cancelling current operation.\n");
+            trigger_cancel();  
+        }
 
         // Check for empty input
         if (*p == '\0') {

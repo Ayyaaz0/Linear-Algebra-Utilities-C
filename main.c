@@ -3,6 +3,7 @@
 
 #include "input.h"
 #include "linalg.h"
+#include "cancel.h" 
 
 static void print_menu(void);
 
@@ -11,6 +12,11 @@ int main(void) {
     bool running = true;
 
     while (running) {
+        // If longjmp() is called, execution resumes here
+        if (setjmp(cancel_jump_point) != 0) {
+            printf("\nOperation cancelled. Returning to main menu.\n");
+        }
+
         print_menu();
 
         selection = get_int("Enter an option: ");
