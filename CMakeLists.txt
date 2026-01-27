@@ -13,4 +13,4 @@ set(SOURCES
     cancel.c
 )
 
-add_executable(main.out ${SOURCES})
+add_executable(smt ${SOURCES})
