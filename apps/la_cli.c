@@ -142,22 +142,137 @@ static void do_solve(void) {
     la_matrix_free(&x);
 }
 
-int main(void) {
-    while (true) {
-        printf("\n===== Linear Algebra Utilities (Demo CLI) =====\n");
-        printf("1. Transpose\n");
-        printf("2. Determinant\n");
-        printf("3. Solve Ax = b\n");
-        printf("0. Exit\n");
-        printf("==============================================\n");
+static void do_add(void) {
+    Matrix A = (Matrix){0};
+    Matrix B = (Matrix){0};
+    Matrix C = (Matrix){0};
 
-        int sel = get_int("Enter an option: ");
-        switch (sel) {
-            case 1: do_transpose();   break;
-            case 2: do_determinant(); break;
-            case 3: do_solve();       break;
-            case 0: return 0;
-            default: printf("Unknown option.\n"); break;
-        }
+    if (read_matrix(&A, "Matrix A") != LA_OK) {
+        printf("Failed to read A.\n");
+        return;
     }
+    if (read_matrix(&B, "Matrix B") != LA_OK) {
+        printf("Failed to read B.\n");
+        la_matrix_free(&A);
+        return;
+    }
+
+    if (A.rows != B.rows || A.cols != B.cols) {
+        printf("Dimension mismatch: A is %zux%zu, B is %zux%zu\n",
+               A.rows, A.cols, B.rows, B.cols);
+        la_matrix_free(&A);
+        la_matrix_free(&B);
+        return;
+    }
+
+    la_status st = la_add(&C, &A, &B);
+    if (st != LA_OK) {
+        printf("Add failed (error %d).\n", (int)st);
+    } else {
+        printf("\nA + B:\n");
+        print_matrix(&C);
+    }
+
+    la_matrix_free(&A);
+    la_matrix_free(&B);
+    la_matrix_free(&C);
+}
+
+static void do_sub(void) {
+    Matrix A = (Matrix){0};
+    Matrix B = (Matrix){0};
+    Matrix C = (Matrix){0};
+
+    if (read_matrix(&A, "Matrix A") != LA_OK) {
+        printf("Failed to read A.\n");
+        return;
+    }
+    if (read_matrix(&B, "Matrix B") != LA_OK) {
+        printf("Failed to read B.\n");
+        la_matrix_free(&A);
+        return;
+    }
+
+    if (A.rows != B.rows || A.cols != B.cols) {
+        printf("Dimension mismatch: A is %zux%zu, B is %zux%zu\n",
+               A.rows, A.cols, B.rows, B.cols);
+        la_matrix_free(&A);
+        la_matrix_free(&B);
+        return;
+    }
+
+    la_status st = la_sub(&C, &A, &B);
+    if (st != LA_OK) {
+        printf("Subtract failed (error %d).\n", (int)st);
+    } else {
+        printf("\nA - B:\n");
+        print_matrix(&C);
+    }
+
+    la_matrix_free(&A);
+    la_matrix_free(&B);
+    la_matrix_free(&C);
+}
+
+static void do_mul(void) {
+    Matrix A = (Matrix){0};
+    Matrix B = (Matrix){0};
+    Matrix C = (Matrix){0};
+
+    if (read_matrix(&A, "Matrix A") != LA_OK) {
+        printf("Failed to read A.\n");
+        return;
+    }
+    if (read_matrix(&B, "Matrix B") != LA_OK) {
+        printf("Failed to read B.\n");
+        la_matrix_free(&A);
+        return;
+    }
+
+    if (A.cols != B.rows) {
+        printf("Dimension mismatch: A is %zux%zu, B is %zux%zu\n",
+               A.rows, A.cols, B.rows, B.cols);
+        printf("For A*B, A.cols must equal B.rows.\n");
+        la_matrix_free(&A);
+        la_matrix_free(&B);
+        return;
+    }
+
+    la_status st = la_mul(&C, &A, &B);
+    if (st != LA_OK) {
+        printf("Multiply failed (error %d).\n", (int)st);
+    } else {
+        printf("\nA * B:\n");
+        print_matrix(&C);
+    }
+
+    la_matrix_free(&A);
+    la_matrix_free(&B);
+    la_matrix_free(&C);
+}
+
+int main(void) {
+  while (true) {
+    printf("\n===== Linear Algebra Utilities (Demo CLI) =====\n");
+    printf("1. Add (A + B)\n");
+    printf("2. Subtract (A - B)\n");
+    printf("3. Multiply (A * B)\n");
+    printf("4. Transpose\n");
+    printf("5. Determinant\n");
+    printf("6. Solve Ax = b\n");
+    printf("0. Exit\n");
+    printf("==============================================\n");
+
+    int sel = get_int("Enter an option: ");
+    switch (sel) {
+    case 1: do_add(); break;
+    case 2: do_sub(); break;
+    case 3: do_mul(); break;
+    case 4: do_transpose(); break;
+    case 5: do_determinant(); break;
+    case 6: do_solve(); break;
+    case 0: return 0;
+    default: printf("Unknown option.\n"); break;
+    }
+  }
 }
