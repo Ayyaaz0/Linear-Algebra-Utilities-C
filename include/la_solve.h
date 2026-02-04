@@ -15,4 +15,6 @@ la_status la_det(double *det_out, const Matrix *A);
 // Returns LA_OK, LA_ERR_DIM, LA_ERR_ALLOC, or LA_ERR_SINGULAR.
 la_status la_solve(Matrix *x_out, const Matrix *A, const Matrix *b);
 
+la_status la_inverse(Matrix *A_inv, const Matrix *A);
+
 #endif

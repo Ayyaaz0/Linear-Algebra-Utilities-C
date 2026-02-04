@@ -82,6 +82,19 @@ int main(void) {
     if (la_solve(&x, &A2, &b2) != LA_OK) return 24;
     if (!nearly_equal(LA_AT(&x,0,0), 0.0)) return 25;
     if (!nearly_equal(LA_AT(&x,1,0), 2.5)) return 26;
+
+    // ---- Inverse test ----
+    // A = [1 2; 3 4]
+    // A^-1 = [-2  1; 1.5 -0.5]
+    Matrix Ainv = (Matrix){0};
+
+    if (la_inverse(&Ainv, &A) != LA_OK) return 30;
+    if (!nearly_equal(LA_AT(&Ainv,0,0), -2.0))  return 31;
+    if (!nearly_equal(LA_AT(&Ainv,0,1),  1.0))  return 32;
+    if (!nearly_equal(LA_AT(&Ainv,1,0),  1.5))  return 33;
+    if (!nearly_equal(LA_AT(&Ainv,1,1), -0.5))  return 34;
+    la_matrix_free(&Ainv);
+
     
     la_matrix_free(&x);
     la_matrix_free(&A2);
@@ -90,7 +103,7 @@ int main(void) {
     la_matrix_free(&A);
     la_matrix_free(&B);
 
-    printf("test_la: OK\n");
+    printf("test_la: PASS\n");
     return 0;
 }
 

@@ -169,3 +169,52 @@ la_status la_solve(Matrix *x_out, const Matrix *A, const Matrix *b) {
     la_matrix_free(&Aug);
     return LA_OK;
 }
+
+la_status la_inverse(Matrix *A_inv, const Matrix *A) {
+    if (!A_inv || !A || !A->data) return LA_ERR_DIM;
+    if (A_inv->data != NULL) return LA_ERR_DIM;
+    if (A->rows != A->cols) return LA_ERR_DIM;
+
+    const size_t n = A->rows;
+
+    // Allocate output inverse matrix
+    la_status st = la_matrix_init(A_inv, n, n);
+    if (st != LA_OK) return st;
+
+    // Temporary vectors
+    Matrix e = (Matrix){0};
+    Matrix x = (Matrix){0};
+
+    st = la_matrix_init(&e, n, 1);
+    if (st != LA_OK) goto fail;
+
+    // Solve A x = e_i for each column i
+    for (size_t col = 0; col < n; col++) {
+        // Reset e to zero
+        for (size_t i = 0; i < n; i++) {
+            LA_AT(&e, i, 0) = 0.0;
+        }
+        LA_AT(&e, col, 0) = 1.0;
+
+        la_matrix_reset(&x);
+
+        st = la_solve(&x, A, &e);
+        if (st != LA_OK) goto fail;
+
+        // Copy solution into column col of A_inv
+        for (size_t i = 0; i < n; i++) {
+            LA_AT(A_inv, i, col) = LA_AT(&x, i, 0);
+        }
+
+        la_matrix_free(&x);
+    }
+
+    la_matrix_free(&e);
+    return LA_OK;
+
+fail:
+    la_matrix_free(&e);
+    la_matrix_free(&x);
+    la_matrix_free(A_inv);
+    return st;
+}
