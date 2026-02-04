@@ -25,7 +25,8 @@ target_compile_options(la PRIVATE ${LA_WARNINGS})
 # --------------------------
 # Demo CLI (uses the la library)
 # --------------------------
-add_executable(la_cli2
+add_executable(
+    la_cli2
     apps/la_cli.c
     src/input.c
 )
@@ -35,9 +36,23 @@ target_link_libraries(la_cli2 PRIVATE la)
 target_compile_options(la_cli2 PRIVATE ${LA_WARNINGS})
 
 # --------------------------
+# Benchmark
+# --------------------------
+add_executable(
+    la_benchmark
+    apps/benchmark.c
+)
+
+target_include_directories(la_benchmark PRIVATE include)
+target_link_libraries(la_benchmark PRIVATE la)
+target_compile_options(la_benchmark PRIVATE ${LA_WARNINGS})
+
+
+# --------------------------
 # Tests
 # --------------------------
-add_executable(test_la
+add_executable(
+    test_la
     tests/test_la.c
 )
 
